@@ -1,0 +1,14 @@
+iptables -A INPUT -p tcp --dport 22 -s 192.168.1.0/24 -j ACCEPT
+iptables -A INPUT -p tcp --dport 22 -j DROP
+
+iptables -A INPUT -m time --timestart 08:00 --timestop 16:00 --days Mon,Tue,Wed,Thu,Fri -j ACCEPT
+
+iptables -A INPUT -m time --timestart 12:00 --timestop 13:00 --days Mon,Tue,Wed,Thu -j DROP
+iptables -A INPUT -m time --timestart 11:00 --timestop 13:00 --days Fri -j DROP
+
+iptables -A INPUT -s 10.64.14.148/30 -m time --datestop 2024-02-15T23:59:59 -j DROP
+
+iptables -A INPUT -p tcp --dport 1:65535 -m recent --set --name PORTSCAN
+iptables -A INPUT -p tcp --dport 1:65535 -m recent --update --seconds 600 --hitcount 20 --rttl --name PORTSCAN -j DROP
+
+iptables -A INPUT -j DROP

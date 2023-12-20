@@ -1,0 +1,53 @@
+apt-get update
+apt-get install isc-dhcp-server -y
+
+echo 'INTERFACES="eth0"' > /etc/default/isc-dhcp-server
+
+echo '#eth0
+subnet 10.64.14.148 netmask 255.255.255.252{
+}
+# TurkRegion
+subnet 10.64.0.0 netmask 255.255.248.0 {
+    range 10.64.0.2 10.64.7.254;
+    option routers 10.64.0.1;
+    option broadcast-address 10.64.7.255;
+    option domain-name-servers 10.64.14.146;
+    default-lease-time 180;
+    max-lease-time 5760;
+}
+
+# GrobeForest
+subnet 10.64.8.0 netmask 255.255.252.0 {
+    range 10.64.8.3 10.64.11.254;
+    option routers 10.64.8.1;
+    option broadcast-address 10.64.11.255;
+    option domain-name-servers 10.64.14.146;
+    default-lease-time 180;
+    max-lease-time 5760;
+}
+
+# LaubHills
+subnet 10.64.12.0 netmask 255.255.254.0 {
+    range 10.64.12.2 10.64.13.254;
+    option routers 10.64.12.1;
+    option broadcast-address 10.64.13.255;
+    option domain-name-servers 10.64.14.146;
+    default-lease-time 180;
+    max-lease-time 5760;
+}
+
+# SchwerMountain
+subnet 10.64.14.0 netmask 255.255.255.128 {
+    range 10.64.14.3 10.64.14.126;
+    option routers 10.64.14.1;
+    option broadcast-address 10.64.14.127;
+    option domain-name-servers 10.64.14.146;
+    default-lease-time 180;
+    max-lease-time 5760;
+}' > /etc/dhcp/dhcpd.conf
+
+service isc-dhcp-server restart
+
+iptables -X
+iptables -F
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP

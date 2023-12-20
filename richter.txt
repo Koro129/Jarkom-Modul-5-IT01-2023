@@ -1,0 +1,20 @@
+apt-get update
+apt-get install bind9 -y
+
+echo 'options {
+    forwarders {
+        192.168.122.1;
+    };
+    auth-nxdomain no;
+    allow-query{any;};
+    listen-on-v6 { any; };
+
+};
+
+' > /etc/bind/named.conf.options
+
+service bind9 restart
+
+iptables -X
+iptables -F
+iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
