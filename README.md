@@ -244,7 +244,7 @@ echo 'net.ipv4.ip_forward=1' > /etc/sysctl.conf
 service isc-dhcp-relay restart
 ```
 ## DNS
-`````
+```
 apt-get update
 apt-get install bind9 -y
 
@@ -274,28 +274,34 @@ iptables -A INPUT -p tcp -j DROP
 iptables -A INPUT -j DROP
 ```
 ## 3
+### Richter & Revolte
 ```
 iptables -A INPUT -p icmp -m connlimit --connlimit-above 3 --connlimit-mask 0 -j DROP
 ```
 ## 4
+### Web Server
 ```
 iptables -A INPUT -p tcp --dport 22 -s 192.168.1.0/24 -j ACCEPT
 iptables -A INPUT -p tcp --dport 22 -j DROP
 ```
 ## 5
+### Web Server
 ```
 iptables -A INPUT -m time --timestart 08:00 --timestop 16:00 --days Mon,Tue,Wed,Thu,Fri -j ACCEPT
 ```
 ## 6
+### Web Server
 ```
 iptables -A INPUT -m time --timestart 12:00 --timestop 13:00 --days Mon,Tue,Wed,Thu -j DROP
 iptables -A INPUT -m time --timestart 11:00 --timestop 13:00 --days Fri -j DROP
 ```
 ## 8
+### Web Server
 ```
 iptables -A INPUT -s 10.64.14.148/30 -m time --datestop 2024-02-15T23:59:59 -j DROP
 ```
 ## 9
+### Web Server
 ```
 iptables -A INPUT -p tcp --dport 1:65535 -m recent --set --name PORTSCAN
 iptables -A INPUT -p tcp --dport 1:65535 -m recent --update --seconds 600 --hitcount 20 --rttl --name PORTSCAN -j DROP
